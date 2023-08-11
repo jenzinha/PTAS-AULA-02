@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const User = require('../model/user');
 
 const createUser = async (req, res) => {
@@ -17,9 +18,36 @@ const createUser = async (req, res) => {
 
 const findUser = async (req, res) => {
     const users = await User.findAll();
-    return res.json( users);
+    try{
+        return res.json(users);
+    } catch (error){
+        res.status(404).json("erro na busca");
+    };
+}
+const deleteUser = async (req, res) => {
+    const id = parseInt(req.params.id);
+    await User.destroy({
+        where:{
+            id:id
+        }
+    })
+}
+
+const updateUser = async (req, res) => {
+    const users = await 
+     User.update(
+        {
+        name: name,
+        password: password,
+        email: email
+        },
+        {
+        where:{
+            id: id
+        }
+        });    
 }
 
 
 
-module.exports = { createUser, findUser };
+module.exports = { createUser, findUser, deleteUser, updateUser };

@@ -12,5 +12,9 @@ app.post('/user', userController.createUser);
 
 app.get('/user', userController.findUser);
 
+app.delete('/user', userController.deleteUser);
+
+app.put('/user', userController.deleteUser);
+
 
 
