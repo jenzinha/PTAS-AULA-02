@@ -1,5 +1,7 @@
 const { where } = require('sequelize');
 const User = require('../model/user');
+const secret = require('../config/auth.json');
+const jwt = require('jsonwebtoken');
 
 const createUser = async (req, res) => {
     const { name, password, email } = req.body;
@@ -24,30 +26,30 @@ const findUser = async (req, res) => {
         res.status(404).json("erro na busca");
     };
 }
-const deleteUser = async (req, res) => {
-    const id = parseInt(req.params.id);
-    await User.destroy({
-        where:{
-            id:id
-        }
-    })
+
+
+const authenticatedUser = async (req, res) => {
+    const {email, password} = req.body;
+    try {
+        const isUserAthenticated = await User.findOne({
+            where:{
+                email: email,
+                password: password
+            }
+        })
+        const token = jwt.sign({ id: email }, secret.secret, {
+            expiresIn: 86400,
+        })
+
+        return res.json({
+            name: isUserAthenticated.name,
+            email: isUserAthenticated.email,
+            token: token
+        });
+    } catch (error) {
+        return res.json("Usuário não encontrado!");
+    }
 }
 
-const updateUser = async (req, res) => {
-    const users = await 
-     User.update(
-        {
-        name: name,
-        password: password,
-        email: email
-        },
-        {
-        where:{
-            id: id
-        }
-        });    
-}
 
-
-
-module.exports = { createUser, findUser, deleteUser, updateUser };
+module.exports = { createUser, findUser, authenticatedUser };
