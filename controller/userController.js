@@ -27,6 +27,15 @@ const findUser = async (req, res) => {
     };
 }
 
+const deleteUser = async (req, res) => {
+    const id = parseInt(req.params.id);
+    await User.destroy({
+        where:{
+            id:id
+        }
+    })
+}
+
 
 const authenticatedUser = async (req, res) => {
     const {email, password} = req.body;
@@ -52,4 +61,4 @@ const authenticatedUser = async (req, res) => {
 }
 
 
-module.exports = { createUser, findUser, authenticatedUser };
+module.exports = { createUser, findUser, authenticatedUser, deleteUser };
