@@ -36,6 +36,20 @@ const deleteUser = async (req, res) => {
     })
 }
 
+const updateUser = async (req, res) => {
+    const { name, password, email } = req.body;
+    await User.update(
+        {
+        name: name,
+        password: password,
+        email: email
+        },
+        {
+        where:{
+            id: id
+        }
+        });    
+}
 
 const authenticatedUser = async (req, res) => {
     const {email, password} = req.body;
@@ -61,4 +75,4 @@ const authenticatedUser = async (req, res) => {
 }
 
 
-module.exports = { createUser, findUser, authenticatedUser, deleteUser };
+module.exports = { createUser, findUser, authenticatedUser, deleteUser, updateUser };
